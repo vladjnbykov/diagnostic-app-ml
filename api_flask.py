@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import joblib
 import traceback
 import pandas as pd
@@ -6,9 +7,15 @@ import numpy as np
 
 app = Flask(__name__)
 
+CORS(app)
+
+
 @app.route('/predict', methods=['POST'])
 
 def predict():
+
+    rf = joblib.load('model.pkl') # Load "model.pkl"
+    print ('Model loaded')
 
     try:
         json_ = request.json
@@ -31,7 +38,6 @@ if __name__ == '__main__':
     except:
         port = 12345 
     
-    rf = joblib.load('random_forest_model_diabetes_refined_31_5_2021.pkl') # Load "model.pkl"
-    print ('Model loaded')
+   
     
     app.run(debug=True, port=port)
